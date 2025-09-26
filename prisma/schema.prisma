@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Event {
-  id          String   @id @default(uuid())
+  id          String   @id @default(nanoid())
   title       String
   description String?
   location    String
@@ -22,4 +22,6 @@ model Event {
   date        DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([date])
 }
