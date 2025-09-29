@@ -16,12 +16,39 @@ datasource db {
 model Event {
   id          String   @id @default(nanoid())
   title       String
-  description String?
-  location    String
-  organizer   String
-  date        DateTime
+  description String
+  price       Float?
+  startTime   String
+  endTime     String
+  adhocLocation AdhocLocation?
+  venue      Venue?    @relation(fields: [venueId], references: [id])
+  venueId    Int?
+  contactEmail String
+  hyperlink    String?
+  imageURL     String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  @@index([date])
+  @@index([venueId, startTime])
+  @@index([startTime])
+}
+
+model Venue {
+  id        Int  @id @default(autoincrement())
+  name      String
+  address   String
+  zipCode  String
+  city      String
+  contactEmail String
+  imageURL     String?
+  events    Event[]
+}
+
+model AdhocLocation {
+  eventId   String  @id
+  event     Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  name      String
+  address   String
+  zipCode   String
+  city      String
 }
