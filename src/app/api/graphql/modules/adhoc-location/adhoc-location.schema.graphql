@@ -1,0 +1,14 @@
+type AdhocLocation {
+  eventId: ID!
+  name: String!
+  address: String!
+  zipCode: String!
+  city: String!
+}
+
+input CreateAdhocLocationInput {
+  name: String!
+  address: String!
+  zipCode: String!
+  city: String!
+}

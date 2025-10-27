@@ -1,0 +1,38 @@
+extend type Query {
+  event(id: ID!): Event
+  events: [Event!]!
+}
+
+extend type Mutation {
+  createEvent(input: CreateEventInput!): Event!
+  deleteEvent(id: ID!): Event
+}
+
+type Event {
+  id: ID!
+  title: String!
+  description: String
+  price: Float
+  startTime: DateTime!
+  endTime: DateTime
+  adhocLocation: AdhocLocation
+  venue: Venue
+  contactEmail: String!
+  hyperlink: String
+  imageURL: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input CreateEventInput {
+  title: String!
+  description: String
+  price: Float
+  startTime: DateTime!
+  endTime: DateTime
+  adhocLocation: CreateAdhocLocationInput
+  venueId: Int
+  contactEmail: String!
+  hyperlink: String
+  imageURL: String
+}

@@ -1,0 +1,29 @@
+extend type Query {
+  venue(id: Int!): Venue
+  venues: [Venue!]!
+}
+
+extend type Mutation {
+  createVenue(input: CreateVenueInput!): Venue!
+  deleteVenue(id: Int!): Venue
+}
+
+type Venue {
+  id: Int!
+  name: String!
+  address: String!
+  zipCode: String!
+  city: String!
+  contactEmail: String!
+  imageURL: String
+  events: [Event!]!
+}
+
+input CreateVenueInput {
+  name: String!
+  address: String!
+  zipCode: String!
+  city: String!
+  contactEmail: String!
+  imageURL: String
+}

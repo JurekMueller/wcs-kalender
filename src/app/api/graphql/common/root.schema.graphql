@@ -1,0 +1,7 @@
+type Query {
+  _: Boolean #needed so that it is not empty. otherwise codegen complains
+}
+
+type Mutation {
+  _: Boolean
+}
