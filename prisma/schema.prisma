@@ -23,6 +23,8 @@ model Event {
   adhocLocation AdhocLocation?
   venue         Venue?         @relation(fields: [venueId], references: [id])
   venueId       Int?
+  owner         User?          @relation(fields: [ownerId], references: [id])
+  ownerId       String?
   contactEmail  String
   hyperlink     String?
   imageURL      String?
@@ -40,6 +42,8 @@ model Venue {
   zipCode      String
   city         String
   contactEmail String
+  owner        User?   @relation(fields: [ownerId], references: [id])
+  ownerId      String?
   imageURL     String?
   hyperlink    String?
   events       Event[]
@@ -65,6 +69,8 @@ model User {
   updatedAt     DateTime  @default(now()) @updatedAt
   sessions      Session[]
   accounts      Account[]
+  events        Event[]
+  venues        Venue[]
 
   @@unique([email])
   @@map("user")
