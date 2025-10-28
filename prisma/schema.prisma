@@ -14,41 +14,103 @@ datasource db {
 }
 
 model Event {
-  id          String   @id @default(nanoid())
-  title       String
-  description String?
-  price       Float?
-  startTime   DateTime
-  endTime     DateTime?
+  id            String         @id @default(nanoid())
+  title         String
+  description   String?
+  price         Float?
+  startTime     DateTime
+  endTime       DateTime?
   adhocLocation AdhocLocation?
-  venue      Venue?    @relation(fields: [venueId], references: [id])
-  venueId    Int?
-  contactEmail String
-  hyperlink    String?
-  imageURL     String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  venue         Venue?         @relation(fields: [venueId], references: [id])
+  venueId       Int?
+  contactEmail  String
+  hyperlink     String?
+  imageURL      String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   @@index([venueId, startTime])
   @@index([startTime])
 }
 
 model Venue {
-  id        Int  @id @default(autoincrement())
-  name      String @unique
-  address   String
-  zipCode  String
-  city      String
+  id           Int     @id @default(autoincrement())
+  name         String  @unique
+  address      String
+  zipCode      String
+  city         String
   contactEmail String
   imageURL     String?
-  events    Event[]
+  hyperlink    String?
+  events       Event[]
 }
 
 model AdhocLocation {
-  eventId   String  @id
-  event     Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  name      String
-  address   String
-  zipCode   String
-  city      String
+  eventId String @id
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  name    String
+  address String
+  zipCode String
+  city    String
+}
+
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean   @default(false)
+  role          String    @default("user")
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @default(now()) @updatedAt
+  sessions      Session[]
+  accounts      Account[]
+
+  @@unique([email])
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+
+  @@map("verification")
 }
