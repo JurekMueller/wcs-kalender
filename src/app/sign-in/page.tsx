@@ -1,17 +1,22 @@
 'use client';
 
+/* 
+This is the sign in page. It can be accessed through the sign-in button on the homepage. 
+Users without a session cookie are redirected here when accessing profile/ pages.
+*/
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { signIn } from '@/app/lib/auth-client';
 
 export default function SignInPage() {
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setError(null);
+    setErrorMessage(null);
     setPending(true);
 
     const form = new FormData(e.currentTarget);
@@ -19,25 +24,26 @@ export default function SignInPage() {
     const password = String(form.get('password'));
 
     try {
-      const { data, error } = await signIn.email({
+      const { error } = await signIn.email({
         email,
         password,
         // rememberMe: true,
-        // callbackURL: '/dashboard', // optional – we’ll push manually below
+        // callbackURL: '/dashboard', // optional
       });
-
       if (error) throw error;
-      // Signed in – go to your protected page
-      router.push('/profile');
-    } catch (err: any) {
-      setError(err?.message ?? 'Failed to sign in');
+      // Signed in – go to profile page
+      // Use replace to not create history entry for sign-in page
+      router.replace('/profile');
+    } catch (err: unknown) {
+      if (err instanceof Error) setErrorMessage(err?.message);
+      else setErrorMessage('Failed to sign in');
     } finally {
       setPending(false);
     }
   }
 
   return (
-    <main className="mx-auto max-w-sm p-6">
+    <main className="mx-auto flex min-h-screen max-w-sm flex-col justify-center p-6">
       <h1 className="mb-4 text-2xl font-semibold">Sign in</h1>
       <form onSubmit={onSubmit} className="space-y-3">
         <input
@@ -61,7 +67,7 @@ export default function SignInPage() {
           {pending ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
-      {error && <p className="mt-3 text-red-600">{error}</p>}
+      {errorMessage && <p className="mt-3 text-red-600">{errorMessage}</p>}
     </main>
   );
 }

@@ -1,4 +1,4 @@
-import { cronAction } from "@/app/server/data/cron-action";
+import { cronAction } from '@/app/server/data/cron-action';
 
 export function UpdateDataButton() {
   return (
