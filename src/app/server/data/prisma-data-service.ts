@@ -10,7 +10,8 @@ export class PrismaDataService {
     findMany: () => {
       return prisma.venue.findMany();
     },
-    create: (input: Prisma.VenueCreateInput) => {
+    create: (input: Prisma.VenueCreateInput, ownerId: string) => {
+      input.owner = { connect: { id: ownerId } };
       return prisma.venue.create({ data: input });
     },
     delete: (id: number) => {
@@ -35,22 +36,30 @@ export class PrismaDataService {
     findMany: (where?: { [key: string]: unknown }) => {
       return prisma.event.findMany({
         where: where,
+        include: { adhocLocation: true },
       });
     },
-    create: (input: CreateEventInput) => {
+    create: (input: CreateEventInput, ownerId?: string) => {
       const { adhocLocation, venueId, ...eventInput } = input;
-      if (venueId)
-        return prisma.event.create({
-          data: { ...eventInput, venue: { connect: { id: venueId } } },
-        });
-      else if (adhocLocation)
-        return prisma.event.create({
-          data: {
-            ...eventInput,
-            adhocLocation: { create: { ...adhocLocation } },
-          },
-        });
-      else throw new Error('Event needs a location or venue');
+      // Validate Location
+      if (adhocLocation && venueId)
+        throw new Error(
+          'Indicate either a venue or a custom location, but not both',
+        );
+      if (!adhocLocation && !venueId)
+        throw new Error('Event needs a location or venue');
+      const data: Prisma.EventCreateInput = {
+        ...eventInput,
+        ...(ownerId ? { owner: { connect: { id: ownerId } } } : {}), // connect to owner if supplied
+        ...(venueId ? { venue: { connect: { id: venueId } } } : {}), // connect to venue if supplied
+        ...(adhocLocation
+          ? { adhocLocation: { create: { ...adhocLocation } } }
+          : {}), // create adhocLocation if supplied
+      };
+      console.log(data);
+      return prisma.event.create({
+        data,
+      });
     },
     delete: (id: string) => {
       // potential adhocLocations should be deleted automatically due to onDelete: cascade
