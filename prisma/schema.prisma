@@ -21,10 +21,10 @@ model Event {
   startTime     DateTime
   endTime       DateTime?
   adhocLocation AdhocLocation?
-  venue         Venue?         @relation(fields: [venueId], references: [id])
+  venue         Venue?         @relation(fields: [venueId], references: [id], onDelete: Cascade)
   venueId       Int?
-  owner         User?          @relation(fields: [ownerId], references: [id])
-  ownerId       String?
+  owner         User          @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId       String
   contactEmail  String
   hyperlink     String?
   imageURL      String?
@@ -42,7 +42,7 @@ model Venue {
   zipCode      String
   city         String
   contactEmail String
-  owner        User?   @relation(fields: [ownerId], references: [id])
+  owner        User?   @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId      String?
   imageURL     String?
   hyperlink    String?

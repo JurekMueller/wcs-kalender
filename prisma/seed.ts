@@ -35,9 +35,7 @@ async function main() {
     },
   });
 
-  // Optionally tag the user as "admin". You can use a custom field or a join table.
-  // The default schema doesn't include roles, so here's a simple approach:
-  // Extend your Prisma User model with e.g. role String @default("user") and then:
+  // User is tagged as admin
   const user = await prisma.user.update({
     where: { email: adminEmail },
     data: { role: 'admin' },
@@ -76,8 +74,7 @@ async function main() {
   console.log('Seeded venues:', createdVenues);
 
   /* Add events */
-  type CreateEventInputWithOwner = CreateEventInput & { ownerId?: string };
-  const events: CreateEventInputWithOwner[] = [
+  const events: CreateEventInput[] = [
     {
       title: 'WCS Social Night Zurich',
       description: 'Chill Friday social with mixers and Jack & Jill warm-ups.',
@@ -85,7 +82,6 @@ async function main() {
       startTime: new Date('2025-11-14T20:00:00+01:00'),
       endTime: new Date('2025-11-15T00:30:00+01:00'),
       venueId: 1,
-      ownerId,
       contactEmail: 'hello@zwswing.ch',
       hyperlink: 'https://zwswing.ch/events/social-night',
       imageURL: 'https://images.example.com/wcs/social_zurich.jpg',
@@ -114,7 +110,6 @@ async function main() {
         zipCode: '1006',
         city: 'Lausanne',
       },
-      ownerId,
       contactEmail: 'contact@lauswing.ch',
       imageURL: 'https://images.example.com/wcs/lausanne_party.jpg',
     },
@@ -165,7 +160,6 @@ async function main() {
         zipCode: '6003',
         city: 'Luzern',
       },
-      ownerId,
       contactEmail: 'crew@luzwcs.ch',
       imageURL: 'https://images.example.com/wcs/luzern_workshop.jpg',
     },
@@ -201,15 +195,13 @@ async function main() {
       startTime: new Date('2026-01-10T20:00:00+01:00'),
       endTime: new Date('2026-01-11T01:00:00+01:00'),
       venueId: 2,
-      ownerId,
       contactEmail: 'events@zwswing.ch',
       imageURL: 'https://images.example.com/wcs/zurich_kickoff.jpg',
     },
   ];
 
   await Promise.all(
-    events.map((e) => {
-      const { ownerId, ...input } = e;
+    events.map((input) => {
       return dataService.event.create(input, ownerId);
     }),
   );
