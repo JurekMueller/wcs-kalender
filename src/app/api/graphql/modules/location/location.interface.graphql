@@ -1,0 +1,6 @@
+interface Location {
+  name: String!
+  address: String!
+  zipCode: String!
+  city: String!
+}

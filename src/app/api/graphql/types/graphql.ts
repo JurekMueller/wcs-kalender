@@ -19,7 +19,7 @@ export type Scalars = {
   DateTime: { input: Date; output: Date; }
 };
 
-export type AdhocLocation = {
+export type AdhocLocation = Location & {
   __typename?: 'AdhocLocation';
   address: Scalars['String']['output'];
   city: Scalars['String']['output'];
@@ -59,7 +59,6 @@ export type CreateVenueInput = {
 
 export type Event = {
   __typename?: 'Event';
-  adhocLocation?: Maybe<AdhocLocation>;
   contactEmail: Scalars['String']['output'];
   createdAt: Scalars['DateTime']['output'];
   description?: Maybe<Scalars['String']['output']>;
@@ -67,11 +66,18 @@ export type Event = {
   hyperlink?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   imageURL?: Maybe<Scalars['String']['output']>;
+  location: Location;
   price?: Maybe<Scalars['Float']['output']>;
   startTime: Scalars['DateTime']['output'];
   title: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
-  venue?: Maybe<Venue>;
+};
+
+export type Location = {
+  address: Scalars['String']['output'];
+  city: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  zipCode: Scalars['String']['output'];
 };
 
 export type Mutation = {
@@ -122,7 +128,7 @@ export type QueryVenueArgs = {
   id: Scalars['Int']['input'];
 };
 
-export type Venue = {
+export type Venue = Location & {
   __typename?: 'Venue';
   address: Scalars['String']['output'];
   city: Scalars['String']['output'];
@@ -204,6 +210,13 @@ export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = 
 
 
 
+/** Mapping of interface types */
+export type ResolversInterfaceTypes<_RefType extends Record<string, unknown>> = {
+  Location:
+    | ( AdhocLocation )
+    | ( VenueModel )
+  ;
+};
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
@@ -217,6 +230,7 @@ export type ResolversTypes = {
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  Location: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Location']>;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -235,6 +249,7 @@ export type ResolversParentTypes = {
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
+  Location: ResolversInterfaceTypes<ResolversParentTypes>['Location'];
   Mutation: Record<PropertyKey, never>;
   Query: Record<PropertyKey, never>;
   String: Scalars['String']['output'];
@@ -247,6 +262,7 @@ export type AdhocLocationResolvers<ContextType = GraphQLContext, ParentType exte
   eventId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   zipCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
@@ -254,7 +270,6 @@ export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 }
 
 export type EventResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Event'] = ResolversParentTypes['Event']> = {
-  adhocLocation?: Resolver<Maybe<ResolversTypes['AdhocLocation']>, ParentType, ContextType>;
   contactEmail?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   createdAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -262,11 +277,15 @@ export type EventResolvers<ContextType = GraphQLContext, ParentType extends Reso
   hyperlink?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   imageURL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  location?: Resolver<ResolversTypes['Location'], ParentType, ContextType>;
   price?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   startTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
-  venue?: Resolver<Maybe<ResolversTypes['Venue']>, ParentType, ContextType>;
+};
+
+export type LocationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Location'] = ResolversParentTypes['Location']> = {
+  __resolveType: TypeResolveFn<'AdhocLocation' | 'Venue', ParentType, ContextType>;
 };
 
 export type MutationResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
@@ -294,12 +313,14 @@ export type VenueResolvers<ContextType = GraphQLContext, ParentType extends Reso
   imageURL?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   zipCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = GraphQLContext> = {
   AdhocLocation?: AdhocLocationResolvers<ContextType>;
   DateTime?: GraphQLScalarType;
   Event?: EventResolvers<ContextType>;
+  Location?: LocationResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Venue?: VenueResolvers<ContextType>;

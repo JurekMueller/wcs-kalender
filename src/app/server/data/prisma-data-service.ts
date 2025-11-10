@@ -39,7 +39,7 @@ export class PrismaDataService {
         include: { adhocLocation: true },
       });
     },
-    create: (input: CreateEventInput, ownerId?: string) => {
+    create: (input: CreateEventInput, ownerId: string) => {
       const { adhocLocation, venueId, ...eventInput } = input;
       // Validate Location
       if (adhocLocation && venueId)
@@ -50,7 +50,7 @@ export class PrismaDataService {
         throw new Error('Event needs a location or venue');
       const data: Prisma.EventCreateInput = {
         ...eventInput,
-        ...(ownerId ? { owner: { connect: { id: ownerId } } } : {}), // connect to owner if supplied
+        owner: { connect: { id: ownerId } }, // connect to owner
         ...(venueId ? { venue: { connect: { id: venueId } } } : {}), // connect to venue if supplied
         ...(adhocLocation
           ? { adhocLocation: { create: { ...adhocLocation } } }

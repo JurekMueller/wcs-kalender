@@ -1,4 +1,4 @@
-type AdhocLocation {
+type AdhocLocation implements Location {
   eventId: ID!
   name: String!
   address: String!

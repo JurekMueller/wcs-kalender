@@ -3,6 +3,7 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 const config: CodegenConfig = {
   overwrite: true,
   schema: 'src/app/api/graphql/**/*.graphql',
+  documents: 'src/app/**/*.tsx',
   generates: {
     'src/app/api/graphql/types/graphql.ts': {
       plugins: ['typescript', 'typescript-resolvers'],
@@ -18,6 +19,9 @@ const config: CodegenConfig = {
           Event: '@prisma/client#Event',
         },
       },
+    },
+    'src/app/api/graphql/types/client/': {
+      preset: 'client',
     },
   },
 };

@@ -1,9 +1,11 @@
 import { scalarResolvers } from '@/app/api/graphql/common/scalars.resolvers';
 import { eventResolvers } from '@/app/api/graphql/modules/event/event.resolvers';
+import { locationResolvers } from '@/app/api/graphql/modules/location/location.resolvers';
 import { venueResolvers } from '@/app/api/graphql/modules/venue/venue.resolvers';
 import { Resolvers } from '@/app/api/graphql/types/graphql';
 import { loadFilesSync } from '@graphql-tools/load-files';
 import { mergeResolvers, mergeTypeDefs } from '@graphql-tools/merge';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -18,8 +20,15 @@ const schemaFiles = loadFilesSync([
   path.join(__dirname, 'common/*.graphql'),
   path.join(__dirname, 'modules/**/*.graphql'),
 ]);
-export const typeDefs = mergeTypeDefs(schemaFiles);
+const typeDefs = mergeTypeDefs(schemaFiles);
 
 // loadFilesSync can not be used for the resolvers as the import paths in the resolver files can not be resolved properly during bundling.
-const resolverFiles = [scalarResolvers, venueResolvers, eventResolvers];
-export const resolvers: Resolvers = mergeResolvers(resolverFiles);
+const resolverFiles = [
+  scalarResolvers,
+  venueResolvers,
+  eventResolvers,
+  locationResolvers,
+];
+const resolvers: Resolvers = mergeResolvers(resolverFiles);
+
+export const schema = makeExecutableSchema({ typeDefs, resolvers });

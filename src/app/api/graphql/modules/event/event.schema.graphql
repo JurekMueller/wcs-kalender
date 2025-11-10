@@ -15,8 +15,7 @@ type Event {
   price: Float
   startTime: DateTime!
   endTime: DateTime
-  adhocLocation: AdhocLocation
-  venue: Venue
+  location: Location!
   contactEmail: String!
   hyperlink: String
   imageURL: String

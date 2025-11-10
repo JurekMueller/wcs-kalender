@@ -8,7 +8,7 @@ extend type Mutation {
   deleteVenue(id: Int!): Venue
 }
 
-type Venue {
+type Venue implements Location {
   id: Int!
   name: String!
   address: String!

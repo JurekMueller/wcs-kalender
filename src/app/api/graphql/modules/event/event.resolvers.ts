@@ -1,4 +1,5 @@
 import { Resolvers } from '@/app/api/graphql/types/graphql';
+import { GraphQLError } from 'graphql';
 
 export const eventResolvers: Resolvers = {
   Query: {
@@ -6,18 +7,26 @@ export const eventResolvers: Resolvers = {
     events: (_p, _a, { dataService }) => dataService.event.findMany(),
   },
   Mutation: {
-    createEvent: (_p, { input }, { dataService }) =>
-      dataService.event.create(input),
+    createEvent: (_p, { input }, { dataService, user }) => {
+      if (!user)
+        throw new GraphQLError('Unauthorized', {
+          extensions: { code: 'UNAUTHORIZED' },
+        });
+      return dataService.event.create(input, user.id);
+    },
     deleteEvent: (_p, { id }, { dataService }) => dataService.event.delete(id),
   },
   Event: {
-    adhocLocation: ({ id, venueId }, _a, { dataService }) => {
-      if (venueId) return null;
-      return dataService.adhocLocation.findAdhocLocation(id);
-    },
-    venue: ({ venueId }, _a, { dataService }) => {
-      if (venueId) return dataService.venue.findById(venueId);
-      else return null;
+    location: async ({ id, venueId }, _a, { dataService }) => {
+      if (venueId) {
+        const venue = await dataService.venue.findById(venueId);
+        if (!venue) throw new GraphQLError('Venue was not found');
+        return venue;
+      }
+      const adhocLocation =
+        await dataService.adhocLocation.findAdhocLocation(id);
+      if (!adhocLocation) throw new GraphQLError('AdhocLocation was not found');
+      return adhocLocation;
     },
   },
 };
