@@ -13,6 +13,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Tag {
+  PARTY
+  WORKSHOP
+}
+
 model Event {
   id            String         @id @default(nanoid())
   title         String
@@ -28,6 +33,7 @@ model Event {
   contactEmail  String
   hyperlink     String?
   imageURL      String?
+  tags          Tag[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 

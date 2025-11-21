@@ -8,6 +8,11 @@ extend type Mutation {
   deleteEvent(id: ID!): Event
 }
 
+enum Tag {
+  PARTY
+  WORKSHOP
+}
+
 type Event {
   id: ID!
   title: String!
@@ -19,6 +24,7 @@ type Event {
   contactEmail: String!
   hyperlink: String
   imageURL: String
+  tags: [Tag!]!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -32,6 +38,7 @@ input CreateEventInput {
   adhocLocation: CreateAdhocLocationInput
   venueId: Int
   contactEmail: String!
+  tags: [Tag!]!
   hyperlink: String
   imageURL: String
 }

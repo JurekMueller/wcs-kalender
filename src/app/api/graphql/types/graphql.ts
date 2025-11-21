@@ -44,6 +44,7 @@ export type CreateEventInput = {
   imageURL?: InputMaybe<Scalars['String']['input']>;
   price?: InputMaybe<Scalars['Float']['input']>;
   startTime: Scalars['DateTime']['input'];
+  tags: Array<Tag>;
   title: Scalars['String']['input'];
   venueId?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -69,6 +70,7 @@ export type Event = {
   location: Location;
   price?: Maybe<Scalars['Float']['output']>;
   startTime: Scalars['DateTime']['output'];
+  tags: Array<Tag>;
   title: Scalars['String']['output'];
   updatedAt: Scalars['DateTime']['output'];
 };
@@ -127,6 +129,10 @@ export type QueryEventArgs = {
 export type QueryVenueArgs = {
   id: Scalars['Int']['input'];
 };
+
+export type Tag =
+  | 'PARTY'
+  | 'WORKSHOP';
 
 export type Venue = Location & {
   __typename?: 'Venue';
@@ -234,6 +240,7 @@ export type ResolversTypes = {
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  Tag: Tag;
   Venue: ResolverTypeWrapper<VenueModel>;
 };
 
@@ -280,6 +287,7 @@ export type EventResolvers<ContextType = GraphQLContext, ParentType extends Reso
   location?: Resolver<ResolversTypes['Location'], ParentType, ContextType>;
   price?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   startTime?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
+  tags?: Resolver<Array<ResolversTypes['Tag']>, ParentType, ContextType>;
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
 };

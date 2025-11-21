@@ -8,6 +8,7 @@ const config: CodegenConfig = {
     'src/app/api/graphql/types/graphql.ts': {
       plugins: ['typescript', 'typescript-resolvers'],
       config: {
+        enumsAsTypes: true,
         contextType: '../context#GraphQLContext',
         scalars: {
           DateTime: 'Date',
@@ -22,6 +23,9 @@ const config: CodegenConfig = {
     },
     'src/app/api/graphql/types/client/': {
       preset: 'client',
+      config: {
+        scalars: { DateTime: 'string' },
+      },
     },
   },
 };

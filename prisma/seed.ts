@@ -16,6 +16,11 @@ async function main() {
   const adminPassword = 'Admin_Password'; // change after first login
   const adminName = 'Jurek';
 
+  // Todays date and date this week
+  const today = new Date();
+  const thisWeek = new Date();
+  thisWeek.setDate(today.getDate() + 1);
+
   // If user exists, skip:
   const existing = await prisma.user.findFirst({
     where: { email: adminEmail },
@@ -85,18 +90,19 @@ async function main() {
       contactEmail: 'hello@zwswing.ch',
       hyperlink: 'https://zwswing.ch/events/social-night',
       imageURL: 'https://images.example.com/wcs/social_zurich.jpg',
+      tags: ['WORKSHOP', 'PARTY'],
     },
     {
       title: 'Basel WCS Fundamentals Workshop',
       description:
         'Beginner-friendly technique focus: anchor, connection, and timing.',
       price: 45.0,
-      startTime: new Date('2025-12-06T13:00:00+01:00'),
-      endTime: new Date('2025-12-06T16:30:00+01:00'),
+      startTime: today,
       venueId: 2,
       contactEmail: 'info@baselswing.ch',
       hyperlink: 'https://baselswing.ch/workshops/fundamentals',
       imageURL: 'https://images.example.com/wcs/basel_workshop.jpg',
+      tags: ['WORKSHOP'],
     },
     {
       title: 'Lausanne WCS Fusion Party',
@@ -112,6 +118,7 @@ async function main() {
       },
       contactEmail: 'contact@lauswing.ch',
       imageURL: 'https://images.example.com/wcs/lausanne_party.jpg',
+      tags: ['PARTY'],
     },
     {
       title: 'Bern Technique Intensive: Stretch & Elasticity',
@@ -123,6 +130,7 @@ async function main() {
       venueId: 1,
       contactEmail: 'team@bernwestcoast.ch',
       hyperlink: 'https://bernwestcoast.ch/intensive-stretch',
+      tags: ['WORKSHOP'],
     },
     {
       title: 'Geneva Sunday WCS Tea Dance',
@@ -139,6 +147,7 @@ async function main() {
       contactEmail: 'bonjour@genevaswing.ch',
       hyperlink: 'https://genevaswing.ch/tea-dance',
       imageURL: 'https://images.example.com/wcs/geneva_tea_dance.jpg',
+      tags: ['WORKSHOP', 'PARTY'],
     },
     {
       title: 'Winterthur WCS Party',
@@ -147,6 +156,7 @@ async function main() {
       endTime: new Date('2026-02-08T00:00:00+01:00'),
       venueId: 2,
       contactEmail: 'hi@wintswing.ch',
+      tags: ['PARTY'],
     },
     {
       title: 'Lucerne Musicality & Styling Workshop',
@@ -162,6 +172,7 @@ async function main() {
       },
       contactEmail: 'crew@luzwcs.ch',
       imageURL: 'https://images.example.com/wcs/luzern_workshop.jpg',
+      tags: ['WORKSHOP'],
     },
     {
       title: 'St. Gallen Late Night Westie Social',
@@ -171,14 +182,14 @@ async function main() {
       venueId: 1,
       contactEmail: 'hello@stgallswing.ch',
       hyperlink: 'https://stgallswing.ch/events/late-night',
+      tags: ['PARTY'],
     },
     {
       title: 'Zug WCS Fundamentals Crash Course',
       description:
         'Perfect for newcomers—get dance-floor ready in one afternoon.',
       price: 40.0,
-      startTime: new Date('2026-02-22T13:30:00+01:00'),
-      endTime: new Date('2026-02-22T16:00:00+01:00'),
+      startTime: thisWeek,
       adhocLocation: {
         name: 'Kulturraum Chollerhalle (Studio B)',
         address: 'Chamerstrasse 177',
@@ -187,6 +198,7 @@ async function main() {
       },
       contactEmail: 'start@zugswing.ch',
       hyperlink: 'https://zugswing.ch/crash-course',
+      tags: ['WORKSHOP'],
     },
     {
       title: 'Zurich WCS New Year Kickoff Party',
@@ -197,6 +209,7 @@ async function main() {
       venueId: 2,
       contactEmail: 'events@zwswing.ch',
       imageURL: 'https://images.example.com/wcs/zurich_kickoff.jpg',
+      tags: ['PARTY'],
     },
   ];
 

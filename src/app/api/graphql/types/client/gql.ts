@@ -14,10 +14,10 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "\n  query Events {\n    events {\n      title\n      description\n      price\n      startTime\n      endTime\n      contactEmail\n      hyperlink\n      location {\n        name\n        address\n        zipCode\n        city\n      }\n    }\n  }\n": typeof types.EventsDocument,
+    "\n  query Events {\n    events {\n      id\n      title\n      description\n      price\n      startTime\n      endTime\n      contactEmail\n      hyperlink\n      tags\n      location {\n        name\n        address\n        zipCode\n        city\n      }\n    }\n  }\n": typeof types.EventsDocument,
 };
 const documents: Documents = {
-    "\n  query Events {\n    events {\n      title\n      description\n      price\n      startTime\n      endTime\n      contactEmail\n      hyperlink\n      location {\n        name\n        address\n        zipCode\n        city\n      }\n    }\n  }\n": types.EventsDocument,
+    "\n  query Events {\n    events {\n      id\n      title\n      description\n      price\n      startTime\n      endTime\n      contactEmail\n      hyperlink\n      tags\n      location {\n        name\n        address\n        zipCode\n        city\n      }\n    }\n  }\n": types.EventsDocument,
 };
 
 /**
@@ -37,7 +37,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n  query Events {\n    events {\n      title\n      description\n      price\n      startTime\n      endTime\n      contactEmail\n      hyperlink\n      location {\n        name\n        address\n        zipCode\n        city\n      }\n    }\n  }\n"): (typeof documents)["\n  query Events {\n    events {\n      title\n      description\n      price\n      startTime\n      endTime\n      contactEmail\n      hyperlink\n      location {\n        name\n        address\n        zipCode\n        city\n      }\n    }\n  }\n"];
+export function graphql(source: "\n  query Events {\n    events {\n      id\n      title\n      description\n      price\n      startTime\n      endTime\n      contactEmail\n      hyperlink\n      tags\n      location {\n        name\n        address\n        zipCode\n        city\n      }\n    }\n  }\n"): (typeof documents)["\n  query Events {\n    events {\n      id\n      title\n      description\n      price\n      startTime\n      endTime\n      contactEmail\n      hyperlink\n      tags\n      location {\n        name\n        address\n        zipCode\n        city\n      }\n    }\n  }\n"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
