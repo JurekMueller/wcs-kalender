@@ -1,6 +1,6 @@
 extend type Query {
   event(id: ID!): Event
-  events: [Event!]!
+  events(filter: EventFilterInput, sort: EventSortInput): [Event!]!
 }
 
 extend type Mutation {
@@ -41,4 +41,19 @@ input CreateEventInput {
   tags: [Tag!]!
   hyperlink: String
   imageURL: String
+}
+
+enum EventSortField {
+  START_TIME
+  END_TIME
+}
+
+input EventSortInput {
+  field: EventSortField!
+  direction: SortDirection! = ASC
+}
+
+input EventFilterInput {
+  startTimeGte: DateTime
+  startTimeLte: DateTime
 }

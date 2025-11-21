@@ -1,12 +1,16 @@
 'use client';
 
 import { graphql } from '@/app/api/graphql/types/client';
+import {
+  EventSortField,
+  SortDirection,
+} from '@/app/api/graphql/types/client/graphql';
 import { EventCard } from '@/app/components/event-card';
 import { useSuspenseQuery } from '@apollo/client/react';
 
 const HOME_EVENTS = graphql(`
-  query Events {
-    events {
+  query Events($filter: EventFilterInput, $sort: EventSortInput) {
+    events(filter: $filter, sort: $sort) {
       id
       title
       description
@@ -31,7 +35,19 @@ const HOME_EVENTS = graphql(`
 export function EventTable() {
   // useSuspenseQuery is the suspense enabled alternative to useQuery
   // data is available immediately on render
-  const { data } = useSuspenseQuery(HOME_EVENTS);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const { data } = useSuspenseQuery(HOME_EVENTS, {
+    variables: {
+      sort: {
+        field: EventSortField.StartTime,
+        direction: SortDirection.Asc,
+      },
+      filter: {
+        startTimeGte: today.toISOString(),
+      },
+    },
+  });
 
   const events = data.events;
   if (!events) return <div>No events</div>;

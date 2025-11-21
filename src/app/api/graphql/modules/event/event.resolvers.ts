@@ -4,7 +4,8 @@ import { GraphQLError } from 'graphql';
 export const eventResolvers: Resolvers = {
   Query: {
     event: (_p, { id }, { dataService }) => dataService.event.findById(id),
-    events: (_p, _a, { dataService }) => dataService.event.findMany(),
+    events: (_p, { filter, sort }, { dataService }) =>
+      dataService.event.findMany({ filter, sort }),
   },
   Mutation: {
     createEvent: (_p, { input }, { dataService, user }) => {

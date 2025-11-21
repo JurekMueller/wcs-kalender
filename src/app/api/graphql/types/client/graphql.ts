@@ -73,6 +73,21 @@ export type Event = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type EventFilterInput = {
+  startTimeGte?: InputMaybe<Scalars['DateTime']['input']>;
+  startTimeLte?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export enum EventSortField {
+  EndTime = 'END_TIME',
+  StartTime = 'START_TIME'
+}
+
+export type EventSortInput = {
+  direction?: SortDirection;
+  field: EventSortField;
+};
+
 export type Location = {
   address: Scalars['String']['output'];
   city: Scalars['String']['output'];
@@ -124,9 +139,20 @@ export type QueryEventArgs = {
 };
 
 
+export type QueryEventsArgs = {
+  filter?: InputMaybe<EventFilterInput>;
+  sort?: InputMaybe<EventSortInput>;
+};
+
+
 export type QueryVenueArgs = {
   id: Scalars['Int']['input'];
 };
+
+export enum SortDirection {
+  Asc = 'ASC',
+  Desc = 'DESC'
+}
 
 export enum Tag {
   Party = 'PARTY',
@@ -145,7 +171,10 @@ export type Venue = Location & {
   zipCode: Scalars['String']['output'];
 };
 
-export type EventsQueryVariables = Exact<{ [key: string]: never; }>;
+export type EventsQueryVariables = Exact<{
+  filter?: InputMaybe<EventFilterInput>;
+  sort?: InputMaybe<EventSortInput>;
+}>;
 
 
 export type EventsQuery = { __typename?: 'Query', events: Array<{ __typename?: 'Event', id: string, title: string, description?: string | null, price?: number | null, startTime: string, endTime?: string | null, contactEmail: string, hyperlink?: string | null, tags: Array<Tag>, location:
@@ -154,4 +183,4 @@ export type EventsQuery = { __typename?: 'Query', events: Array<{ __typename?: '
      }> };
 
 
-export const EventsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Events"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"events"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"price"}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"contactEmail"}},{"kind":"Field","name":{"kind":"Name","value":"hyperlink"}},{"kind":"Field","name":{"kind":"Name","value":"tags"}},{"kind":"Field","name":{"kind":"Name","value":"location"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"zipCode"}},{"kind":"Field","name":{"kind":"Name","value":"city"}}]}}]}}]}}]} as unknown as DocumentNode<EventsQuery, EventsQueryVariables>;
+export const EventsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Events"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"EventFilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"EventSortInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"events"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"price"}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"contactEmail"}},{"kind":"Field","name":{"kind":"Name","value":"hyperlink"}},{"kind":"Field","name":{"kind":"Name","value":"tags"}},{"kind":"Field","name":{"kind":"Name","value":"location"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"zipCode"}},{"kind":"Field","name":{"kind":"Name","value":"city"}}]}}]}}]}}]} as unknown as DocumentNode<EventsQuery, EventsQueryVariables>;

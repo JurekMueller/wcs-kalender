@@ -1,6 +1,19 @@
-import { CreateEventInput } from '@/app/api/graphql/types/graphql';
+import {
+  CreateEventInput,
+  EventSortField,
+  EventSortInput,
+  EventFilterInput,
+} from '@/app/api/graphql/types/graphql';
 import { prisma } from '@/app/server/prisma';
 import { Prisma } from '@prisma/client';
+
+const sortFieldMap: Record<
+  EventSortField,
+  keyof Prisma.EventOrderByWithRelationInput
+> = {
+  START_TIME: 'startTime',
+  END_TIME: 'endTime',
+} as const;
 
 export class PrismaDataService {
   venue = {
@@ -33,9 +46,30 @@ export class PrismaDataService {
         where: { id: id },
       });
     },
-    findMany: (where?: { [key: string]: unknown }) => {
+    findMany: (options?: {
+      filter?: EventFilterInput | null;
+      sort?: EventSortInput | null;
+    }) => {
+      const { filter, sort } = options ?? {};
+      // construct where
+      const where: Prisma.EventWhereInput = {};
+      if (filter) {
+        if (filter.startTimeGte || filter.startTimeLte) {
+          where.startTime = {
+            gte: filter.startTimeGte ?? undefined,
+            lte: filter.startTimeLte ?? undefined,
+          };
+        }
+      }
+      // construct orderBy
+      const orderBy: Prisma.EventOrderByWithRelationInput = {};
+      if (sort) {
+        const { field, direction } = sort;
+        orderBy[sortFieldMap[field]] = direction === 'ASC' ? 'asc' : 'desc';
+      }
       return prisma.event.findMany({
-        where: where,
+        where,
+        orderBy,
         include: { adhocLocation: true },
       });
     },

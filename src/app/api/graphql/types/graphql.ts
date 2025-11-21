@@ -75,6 +75,20 @@ export type Event = {
   updatedAt: Scalars['DateTime']['output'];
 };
 
+export type EventFilterInput = {
+  startTimeGte?: InputMaybe<Scalars['DateTime']['input']>;
+  startTimeLte?: InputMaybe<Scalars['DateTime']['input']>;
+};
+
+export type EventSortField =
+  | 'END_TIME'
+  | 'START_TIME';
+
+export type EventSortInput = {
+  direction: SortDirection;
+  field: EventSortField;
+};
+
 export type Location = {
   address: Scalars['String']['output'];
   city: Scalars['String']['output'];
@@ -126,9 +140,19 @@ export type QueryEventArgs = {
 };
 
 
+export type QueryEventsArgs = {
+  filter?: InputMaybe<EventFilterInput>;
+  sort?: InputMaybe<EventSortInput>;
+};
+
+
 export type QueryVenueArgs = {
   id: Scalars['Int']['input'];
 };
+
+export type SortDirection =
+  | 'ASC'
+  | 'DESC';
 
 export type Tag =
   | 'PARTY'
@@ -233,12 +257,16 @@ export type ResolversTypes = {
   CreateVenueInput: CreateVenueInput;
   DateTime: ResolverTypeWrapper<Scalars['DateTime']['output']>;
   Event: ResolverTypeWrapper<EventModel>;
+  EventFilterInput: EventFilterInput;
+  EventSortField: EventSortField;
+  EventSortInput: EventSortInput;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Location: ResolverTypeWrapper<ResolversInterfaceTypes<ResolversTypes>['Location']>;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
+  SortDirection: SortDirection;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Tag: Tag;
   Venue: ResolverTypeWrapper<VenueModel>;
@@ -253,6 +281,8 @@ export type ResolversParentTypes = {
   CreateVenueInput: CreateVenueInput;
   DateTime: Scalars['DateTime']['output'];
   Event: EventModel;
+  EventFilterInput: EventFilterInput;
+  EventSortInput: EventSortInput;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
@@ -307,7 +337,7 @@ export type MutationResolvers<ContextType = GraphQLContext, ParentType extends R
 export type QueryResolvers<ContextType = GraphQLContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   _?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   event?: Resolver<Maybe<ResolversTypes['Event']>, ParentType, ContextType, RequireFields<QueryEventArgs, 'id'>>;
-  events?: Resolver<Array<ResolversTypes['Event']>, ParentType, ContextType>;
+  events?: Resolver<Array<ResolversTypes['Event']>, ParentType, ContextType, Partial<QueryEventsArgs>>;
   venue?: Resolver<Maybe<ResolversTypes['Venue']>, ParentType, ContextType, RequireFields<QueryVenueArgs, 'id'>>;
   venues?: Resolver<Array<ResolversTypes['Venue']>, ParentType, ContextType>;
 };

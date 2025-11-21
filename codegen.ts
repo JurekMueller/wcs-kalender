@@ -19,6 +19,9 @@ const config: CodegenConfig = {
           Venue: '@prisma/client#Venue',
           Event: '@prisma/client#Event',
         },
+        avoidOptionals: {
+          defaultValue: true,
+        },
       },
     },
     'src/app/api/graphql/types/client/': {
