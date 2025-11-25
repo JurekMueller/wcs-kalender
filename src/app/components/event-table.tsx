@@ -29,9 +29,7 @@ const HOME_EVENTS = graphql(`
     }
   }
 `);
-// Todo: Style cards and table
-// Todo: create styled skeleton
-// Todo: Load additional events on scrollend
+
 export function EventTable() {
   // useSuspenseQuery is the suspense enabled alternative to useQuery
   // data is available immediately on render
@@ -47,6 +45,9 @@ export function EventTable() {
         startTimeGte: today.toISOString(),
       },
     },
+    // Even though this is a client component, without 'no-store', nextjs fetches data during build time.
+    // This is due to how useSuspenseQuery interacts with SSR
+    context: { fetchOptions: { cache: 'no-store' } },
   });
 
   const events = data.events;

@@ -8,6 +8,8 @@ const config: CodegenConfig = {
     'src/app/api/graphql/types/graphql.ts': {
       plugins: ['typescript', 'typescript-resolvers'],
       config: {
+        useTypeScriptAny: false,
+        defaultScalarType: 'unknown',
         enumsAsTypes: true,
         contextType: '../context#GraphQLContext',
         scalars: {
