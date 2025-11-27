@@ -8,9 +8,9 @@ export default async function Home() {
       <h1 className="text-3xl font-bold">WCS Kalender Bern</h1>
       <p className="mt-2 text-lg">Work in progress</p>
       <SignInButton />
-      <Suspense fallback={<div>Loading events…</div>}>
+      {/* <Suspense fallback={<div>Loading events…</div>}>
         <EventTable />
-      </Suspense>
+      </Suspense> */}
     </main>
   );
 }

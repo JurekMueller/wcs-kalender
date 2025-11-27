@@ -12,7 +12,7 @@ import { auth } from '@/app/server/auth';
 
 // Ensure this route runs in the Node.js runtime so server-side auth and
 // Prisma (which rely on Node APIs) work correctly in deployments.
-export const runtime = 'nodejs';
+// export const runtime = 'nodejs';
 
 // I needed to prevent type inference here and addign BaseContext, because
 // startServerAndCreateNextHandler could not deal with anything else
@@ -37,32 +37,10 @@ const handler = startServerAndCreateNextHandler<NextRequest>(server, {
   },
 });
 
-const allowedOrigin =
-  process.env.NEXT_PUBLIC_BASE_URL ||
-  `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
-
-function withCors(response: Response) {
-  response.headers.set('Access-Control-Allow-Origin', allowedOrigin);
-  response.headers.set('Access-Control-Allow-Credentials', 'true');
-  response.headers.set(
-    'Access-Control-Allow-Headers',
-    'Content-Type, Authorization',
-  );
-  response.headers.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-  return response;
-}
-
 export async function GET(request: NextRequest) {
-  const res = await handler(request);
-  return withCors(res);
+  return handler(request);
 }
 
 export async function POST(request: NextRequest) {
-  const res = await handler(request);
-  return withCors(res);
-}
-
-// Required so browsers can preflight POST requests
-export async function OPTIONS() {
-  return withCors(new Response(null, { status: 204 }));
+  return handler(request);
 }
