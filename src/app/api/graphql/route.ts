@@ -10,11 +10,7 @@ import { schema } from '@/app/api/graphql';
 import { GraphQLContext } from '@/app/api/graphql/context';
 import { auth } from '@/app/server/auth';
 
-// Ensure this route runs in the Node.js runtime so server-side auth and
-// Prisma (which rely on Node APIs) work correctly in deployments.
-// export const runtime = 'nodejs';
-
-// I needed to prevent type inference here and addign BaseContext, because
+// I needed to prevent type inference here and adding BaseContext, because
 // startServerAndCreateNextHandler could not deal with anything else
 const server = new ApolloServer<BaseContext>({
   schema,
