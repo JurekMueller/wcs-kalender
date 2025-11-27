@@ -37,10 +37,32 @@ const handler = startServerAndCreateNextHandler<NextRequest>(server, {
   },
 });
 
+const allowedOrigin =
+  process.env.NEXT_PUBLIC_BASE_URL ||
+  `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
+
+function withCors(response: Response) {
+  response.headers.set('Access-Control-Allow-Origin', allowedOrigin);
+  response.headers.set('Access-Control-Allow-Credentials', 'true');
+  response.headers.set(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization',
+  );
+  response.headers.set('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+  return response;
+}
+
 export async function GET(request: NextRequest) {
-  return handler(request);
+  const res = await handler(request);
+  return withCors(res);
 }
 
 export async function POST(request: NextRequest) {
-  return handler(request);
+  const res = await handler(request);
+  return withCors(res);
+}
+
+// Required so browsers can preflight POST requests
+export async function OPTIONS() {
+  return withCors(new Response(null, { status: 204 }));
 }
